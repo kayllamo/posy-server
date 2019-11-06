@@ -58,8 +58,8 @@ ALTER TABLE logs
 
 -- Add log_authors to the logs
 UPDATE logs SET log_author = 1 WHERE id = 1;
-UPDATE logs SET log_author = 2 WHERE id = 2;
+UPDATE logs SET log_author = 3 WHERE id = 2;
 UPDATE logs SET log_author = 3 WHERE id = 3;
 UPDATE logs SET log_author = 4 WHERE id = 4;
-UPDATE logs SET log_author = 1 WHERE id = 3;
-UPDATE logs SET log_author = 2 WHERE id = 4;
+UPDATE logs SET log_author = 3 WHERE id = 3;
+UPDATE logs SET log_author = 3 WHERE id = 4;

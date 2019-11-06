@@ -1,6 +1,5 @@
 const knex = require('knex');
 const app = require('./app');
-const {PORT} = require('./config');
 
 const { PORT, DATABASE_URL } = require('./config')
 

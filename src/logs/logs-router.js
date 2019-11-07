@@ -25,7 +25,7 @@ LogsRouter
       .catch(next)
   })
   .post(jsonParser, (req, res, next) => {
-    const { log_name, log_date, log_tag, log_author, log_entry } = req.body
+    const { log_name, log_date, log_tag, log_entry } = req.body
     const newLog = { log_name, log_entry }
 
     for (const [key, value] of Object.entries(newLog))
@@ -36,6 +36,7 @@ LogsRouter
 
     newLog.log_date = log_date
     newLog.log_entry = log_entry
+    newLog.log_tag = log_tag
     LogsService.insertLog(
       req.app.get('db'),
       newLog
@@ -95,6 +96,7 @@ LogsRouter
 
     newLog.log_date = log_date
     newLog.log_entry = log_entry
+    newLog.log_tag = log_tag
     LogsService.updateLog(
       req.app.get('db'),
       req.params.log_id,

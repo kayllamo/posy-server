@@ -10,12 +10,13 @@ const usersRouter = require('./auth/user-router');
 
 const app = express();
 
-app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
-    skip: () => NODE_ENV === 'test',
-  }))
-  app.use(cors())
-  app.use(helmet())
+const morganOption = (NODE_ENV === 'production')
+  ? 'tiny'
+  : 'common';
 
+app.use(morgan(morganOption))
+app.use(cors())
+app.use(helmet())
 
 // POSY endpoints
 

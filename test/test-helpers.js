@@ -7,54 +7,54 @@ function makeUsersArray() {
       id: 1,
       user_name: 'test-user-1',
       user_email: 'testing@gmail.com',
-      user_password: 'password',
+      user_password: 'password'
     },
     {
       id: 2,
       user_name: 'test-user-2',
       user_email: 'testing2@gmail.com',
-      user_password: 'password',
+      user_password: 'password'
     },
     {
       id: 3,
       user_name: 'test-user-3',
       user_email: 'testing3@gmail.com',
-      user_password: 'password',
+      user_password: 'password'
     },
     {
       id: 4,
       user_name: 'test-user-4',
       user_email: 'testing4@gmail.com',
-      user_password: 'password',
+      user_password: 'password'
     },
   ]
 }
 
-function makeLogsArray(users) {
+function makeLogsArray() {
   return [
     {
       id: 1,
       log_name: 'First test thing!',
-      log_tag: 'Happy',
-      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?',
+      log_date: '1/1/2020',
+      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
     },
     {
       id: 2,
       log_name: 'Second test thing!',
-      log_tag: 'Sad',
-      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?',
+      log_date: '12/2/2019',
+      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
     },
     {
       id: 3,
       log_name: 'Third test thing!',
-      log_tag: 'Content',
-      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?',
+      log_date: '2/14/2020',
+      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
     },
     {
       id: 4,
       log_name: 'Fourth test thing!',
-      log_tag: 'Excited',
-      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?',
+      log_date: '1/2/2020',
+      log_entry: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus consequuntur deserunt commodi, nobis qui inventore corrupti iusto aliquid debitis unde non.Adipisci, pariatur.Molestiae, libero esse hic adipisci autem neque ?'
     }
   ]
 }
@@ -62,7 +62,7 @@ function makeLogsArray(users) {
 
 function makeLogsFixtures() {
   const testUsers = makeUsersArray()
-  const testLogs = makeLogsArray(testUsers)
+  const testLogs = makeLogsArray()
   return { testUsers, testLogs }
 }
 
@@ -71,9 +71,9 @@ function cleanTables(db) {
 }
 
 function seedUsers(db, users) {
-  const preppedUsers = users.map(user => ({
-    ...user,
-    password: bcrypt.hashSync(user.user_password, 1)
+  const preppedUsers = users.map(user_name => ({
+    ...user_name,
+    user_password: bcrypt.hashSync(user_name.user_password, 1)
   }))
   return db.into('users').insert(preppedUsers)
     .then(() =>
@@ -125,8 +125,9 @@ module.exports = {
   makeLogsArray,
   makeLogsFixtures,
   cleanTables,
+  seedUsers,
   seedLogsTables,
   seedMaliciousLog,
   makeAuthHeader,
-  seedUsers
+
 }

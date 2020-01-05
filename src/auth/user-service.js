@@ -35,7 +35,7 @@ const UsersService = {
       return {
         id: user.id,
         user_name: xss(user.user_name),
-        user_email: xss(user.user_email), 
+        user_email: xss(user.user_email)
       }
     },
   }

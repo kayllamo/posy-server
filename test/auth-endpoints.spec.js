@@ -8,30 +8,28 @@ describe.only('Auth Endpoints', function() {
 
   const { testUsers } = helpers.makeLogsFixtures()
   const testUser = testUsers[0]
-
+  
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
-      connection: process.env.TEST_DB_URL,
+      connection: process.env.TEST_DATABASE_URL,
     })
     app.set('db', db)
   })
 
   after('disconnect from db', () => db.destroy())
-
-  before('cleanup', () => helpers.cleanTables(db))
-
   afterEach('cleanup', () => helpers.cleanTables(db))
   
   describe(`POST /api/auth/login`, () => {
+
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
-        testUsers,
+        testUsers
       )
     )
 
- const requiredFields = ['user_name', 'password']
+ const requiredFields = ['user_name', 'user_password']
 
    requiredFields.forEach(field => {
    const loginAttemptBody = {
@@ -51,14 +49,14 @@ describe.only('Auth Endpoints', function() {
   })
 })
 it(`responds 400 'invalid user_name or password' when bad user_name`, () => {
-    const userInvalidUser = { user_name: 'user-not', password: 'existy' }
+    const userInvalidUser = { user_name: 'user-not', user_password: 'existy' }
    return supertest(app)
      .post('/api/auth/login')
      .send(userInvalidUser)
       .expect(400, { error: `Incorrect user_name or password` })
     })
     it(`responds 400 'invalid user_name or password' when bad password`, () => {
-        const userInvalidPass = { user_name: testUser.user_name, password: 'incorrect' }
+        const userInvalidPass = { user_name: testUser.user_name, user_password: 'incorrect' }
          return supertest(app)
          .post('/api/auth/login')
         .send(userInvalidPass)

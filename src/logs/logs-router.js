@@ -9,8 +9,6 @@ const serializeLog = log => ({
   id: log.id,
   log_name: xss(log.log_name),
   log_date: log.log_date,
-  log_tag: log.log_tag,
-  log_author: log.log_author,
   log_entry: xss(log.log_entry),
 })
 
@@ -25,7 +23,7 @@ LogsRouter
       .catch(next)
   })
   .post(jsonParser, (req, res, next) => {
-    const { log_name, log_date, log_tag, log_entry } = req.body
+    const { log_name, log_date, log_entry } = req.body
     const newLog = { log_name, log_entry }
 
     for (const [key, value] of Object.entries(newLog))
@@ -36,7 +34,6 @@ LogsRouter
 
     newLog.log_date = log_date
     newLog.log_entry = log_entry
-    newLog.log_tag = log_tag
     LogsService.insertLog(
       req.app.get('db'),
       newLog
@@ -82,7 +79,7 @@ LogsRouter
       .catch(next)
   })
   .patch(jsonParser, (req, res, next) => {
-    const { log_name, log_date, log_tag, log_entry } = req.body
+    const { log_name, log_date, log_entry } = req.body
     const logToUpdate = { log_name, log_entry }
 
     const numberOfValues = Object.values(logToUpdate).filter(Boolean).length
@@ -96,7 +93,6 @@ LogsRouter
 
     newLog.log_date = log_date
     newLog.log_entry = log_entry
-    newLog.log_tag = log_tag
     LogsService.updateLog(
       req.app.get('db'),
       req.params.log_id,

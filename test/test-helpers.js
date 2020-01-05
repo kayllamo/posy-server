@@ -67,12 +67,7 @@ function makeLogsFixtures() {
 }
 
 function cleanTables(db) {
-  return db.raw(
-    `TRUNCATE
-      users,
-      logs,
-      RESTART IDENTITY CASCADE`
-  )
+  return db.destroy()
 }
 
 function seedUsers(db, users) {
@@ -133,5 +128,5 @@ module.exports = {
   seedLogsTables,
   seedMaliciousLog,
   makeAuthHeader,
-  seedUsers,
+  seedUsers
 }

@@ -32,8 +32,8 @@ usersRouter
                 .then(hashedPassword => {
                     const newUser = {
                         user_email, 
-                        user_password: hashedPassword, 
                         user_name,
+                        user_password: hashedPassword
                     }
             
                 return UsersService.insertUser(

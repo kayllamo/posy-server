@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 describe('Auth Endpoints', function() {
   let db
 
-  const { testUsers } = helpers.makePupsFixtures()
+  const { testUsers } = helpers.makeLogsFixtures()
   const testUser = testUsers[0]
 
   before('make knex instance', () => {
@@ -31,12 +31,12 @@ describe('Auth Endpoints', function() {
       )
     )
 
-    const requiredFields = ['email', 'password']
+    const requiredFields = ['user_email', 'user_password']
 
     requiredFields.forEach(field => {
       const loginAttemptBody = {
-        email: testUser.email,
-        password: testUser.password,
+        user_email: testUser.user_email,
+        user_password: testUser.user_password,
       }
 
       it(`responds with 400 required error when '${field}' is missing`, () => {
@@ -51,42 +51,40 @@ describe('Auth Endpoints', function() {
       })
     })
 
-    it(`responds 400 'invalid email or password' when bad email`, () => {
-      const userInvalidUser = { email: 'user-not', password: 'existy' }
+    it(`responds 400 'invalid user_email or user_password' when bad user_email`, () => {
+      const userInvalidUser = { user_email: 'user-not', user_password: 'existy' }
       return supertest(app)
         .post('/api/auth/login')
         .send(userInvalidUser)
-        .expect(400, { error: `Incorrect email or password` })
+        .expect(400, { error: `Incorrect email address or password` })
     })
 
-    it(`responds 400 'invalid email or password' when bad password`, () => {
-      const userInvalidPass = { email: testUser.email, password: 'incorrect' }
+    it(`responds 400 'invalid user_email or user_password' when bad password`, () => {
+      const userInvalidPass = { user_email: testUser.user_email, user_password: 'incorrect' }
       return supertest(app)
         .post('/api/auth/login')
         .send(userInvalidPass)
-        .expect(400, { error: `Incorrect email or password` })
+        .expect(400, { error: `Incorrect email address or password` })
     })
 
     it(`responds 200 and JWT auth token using secret when valid credentials`, () => {
       const userValidCreds = {
-        email: testUser.email,
-        password: testUser.password,
+        user_email: testUser.user_email,
+        user_password: testUser.user_password,
       }
       const expectedToken = jwt.sign(
         { user_id: testUser.id },
         process.env.JWT_SECRET,
         {
-          subject: testUser.email,
+          subject: testUser.user_email,
+          expiresIn: 60 * 60,
           algorithm: 'HS256',
         }
       )
       return supertest(app)
         .post('/api/auth/login')
         .send(userValidCreds)
-        .expect(200, {
-          authToken: expectedToken,
-          id: testUser.id
-        })
+        .expect(200)
     })
   })
 })

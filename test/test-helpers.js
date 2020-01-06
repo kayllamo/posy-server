@@ -59,17 +59,6 @@ function makeLogsArray() {
   ]
 }
 
-
-function makeLogsFixtures() {
-  const testUsers = makeUsersArray()
-  const testLogs = makeLogsArray()
-  return { testUsers, testLogs }
-}
-
-function cleanTables(db) {
-  return db.destroy()
-}
-
 function seedUsers(db, users) {
   const preppedUsers = users.map(user_name => ({
     ...user_name,
@@ -79,7 +68,7 @@ function seedUsers(db, users) {
     .then(() =>
       // update the auto sequence to stay in sync
       db.raw(
-        `SELECT setval('posy_users_id_seq', ?)`,
+        `SELECT setval('logs_id_seq', ?)`,
         [users[users.length - 1].id],
       )
     )
@@ -100,6 +89,28 @@ function seedLogsTables(db, users, logs=[]) {
 }
 
 
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+  const token = jwt.sign({ user_id: user.id }, secret, {
+    subject: user.user_name,
+         algorithm: 'HS256',
+       })
+       return `Bearer ${token}`
+   }
+  
+function makeLogsFixtures() {
+  const testUsers = makeUsersArray()
+  const testLogs = makeLogsArray()
+  return { testUsers, testLogs }
+}
+
+function cleanTables(db) {
+  return db.raw(
+    `TRUNCATE
+    logs,
+    users
+  RESTART IDENTITY CASCADE`
+  )
+}
 
 function seedMaliciousLog(db, user, log) {
   return db
@@ -111,14 +122,6 @@ function seedMaliciousLog(db, user, log) {
         .insert([log])
     )
 }
-
-function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
-  const token = jwt.sign({ user_id: user.id }, secret, {
-    subject: user.user_name,
-         algorithm: 'HS256',
-       })
-       return `Bearer ${token}`
-   }
 
 module.exports = {
   makeUsersArray,

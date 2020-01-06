@@ -86,13 +86,14 @@ LogsRouter
       if (numberOfValues === 0) {
         return res.status(400).json({
           error: {
-            message: `Request body must contain a log name`
+            message: `Request body must contain a log name or entry`
           }
         })
     }
 
-    newLog.log_date = log_date
-    newLog.log_entry = log_entry
+    logToUpdate.log_date = log_date
+    logToUpdate.log_entry = log_entry
+
     LogsService.updateLog(
       req.app.get('db'),
       req.params.log_id,
